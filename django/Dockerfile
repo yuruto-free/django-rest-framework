@@ -17,7 +17,7 @@ COPY ./requirements.txt /requirements.txt
 
 # Install
 RUN    apk --no-cache update \
-    && apk add --no-cache bash tzdata gettext pcre-dev mysql-client bind-tools libuuid \
+    && apk add --no-cache bash tzdata gettext pcre-dev mysql-client bind-tools libuuid su-exec \
                          mariadb-dev mariadb-connector-c-dev libsodium libxml2-dev tini shadow \
     && ln -sf /usr/share/zoneinfo/${TZ} /etc/localtime \
     && echo ${TZ} > /etc/timezone \
@@ -39,7 +39,7 @@ RUN    apk --no-cache update \
     \
     # Install python libraries
     \
-    && pip install -r /requirements.txt
+    && pip install -r /requirements.txt \
     \
     # Delete temporary libraries
     \
@@ -50,10 +50,9 @@ RUN    apk --no-cache update \
 
 # change working directory
 WORKDIR ${SRC_ROOT_PATH}
-USER node
 # add shell script
-COPY ./execute.sh /execute.sh
-RUN chmod 755 /execute.sh
+COPY ./execute.sh /usr/local/bin/execute.sh
+RUN chmod 755 /usr/local/bin/execute.sh
 
 ENTRYPOINT ["/sbin/tini", "-e", "143", "--"]
-CMD ["/execute.sh"]
+CMD ["/usr/local/bin/execute.sh"]

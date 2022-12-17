@@ -21,7 +21,9 @@ usermod -u ${_uid} node
 groupdel tmpgroup
 
 if [ "${DJANGO_APP_ENV}" = "development" ]; then
-    python manage.py runserver ${APP_PORT}
+    su-exec node:node python manage.py makemigrations
+    su-exec node:node python manage.py migrate
+    su-exec node:node python manage.py runserver 0.0.0.0:${APP_PORT}
 else
     # Waiting for MySQL database to be ready...
     db_cmd="mysql -h ${DB_HOST} -u ${MYSQL_USER} -p${MYSQL_PASSWORD} -P ${DB_PORT}"
@@ -40,6 +42,8 @@ else
     } | tr '\n' ' ')
     cat /data/uwsgi.template | envsubst "${env_vars}" > /data/uwsgi.ini
 
+    su-exec node:node python manage.py makemigrations
+    su-exec node:node python manage.py migrate
     # Execute uWSGI
     uwsgi --ini /data/uwsgi.ini
 fi
