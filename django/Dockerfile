@@ -9,6 +9,7 @@ LABEL description="build django-rest-framework"
 ENV PYTHONUNBUFFERED=1 \
     PYTHONIOENCODING=utf-8 \
     SRC_ROOT_PATH=/code \
+    APP_PORT=3000 \
     PUID=1000 \
     PGID=1000
 
@@ -16,7 +17,7 @@ COPY ./requirements.txt /requirements.txt
 
 # Install
 RUN    apk --no-cache update \
-    && apk add --no-cache bash tzdata gettext pcre-dev mysql-client bind-tools libuuid su-exec \
+    && apk add --no-cache bash tzdata gettext pcre-dev mysql-client bind-tools libuuid \
                          mariadb-dev mariadb-connector-c-dev libsodium libxml2-dev tini shadow \
     && ln -sf /usr/share/zoneinfo/${TZ} /etc/localtime \
     && echo ${TZ} > /etc/timezone \
@@ -40,19 +41,16 @@ RUN    apk --no-cache update \
     \
     && pip install -r /requirements.txt
     \
-    # Create user
-    \
-    && groupadd -g ${WWWUSER_PGID} www-user \
-    && useradd -s /sbin/nologin -M -d /dev/null -u ${WWWUSER_PUID} -g ${WWWUSER_PGID} www-user \
-    \
     # Delete temporary libraries
     \
     && apk --purge del .build-deps \
     && mkdir -p ${SRC_ROOT_PATH} \
+    && mkdir /data \
     && rm -rf /root/.cache /var/cache/apk/* /tmp/*
 
 # change working directory
 WORKDIR ${SRC_ROOT_PATH}
+USER node
 # add shell script
 COPY ./execute.sh /execute.sh
 RUN chmod 755 /execute.sh
