@@ -1,0 +1,66 @@
+version: '3.7'
+
+x-logging:
+  &json-logging
+  driver: json-file
+  options:
+    max-size: "1m"
+    max-file: "3"
+
+services:
+  django:
+    build:
+      context: ./django
+      dockerfile: Dockerfile
+      args:
+        TZ: 'Asia/Tokyo'
+    image: django
+    container_name: django
+    environment:
+      - LANGUAGE_CODE=ja
+      - TZ=Asia/Tokyo
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_CHARSET=utf8mb4
+      - DB_COLLATION=utf8mb4_unicode_ci
+    env_file:
+      - ./envs/django/.env
+      - ./envs/mysql/.env
+    networks:
+      - frontend
+      - backend
+    volumes:
+      - ./django/src:/code
+      - ./django/sqlite:/sqlite
+    ports:
+      - 3000:3000
+    depends_on:
+      - mysql
+    restart: always
+    logging: *json-logging
+
+  mysql:
+    image: mysql
+    container_name: mysql
+    environment:
+      - TZ=Asia/Tokyo
+    env_file:
+      - ./envs/mysql/.env
+    networks:
+      - backend
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - database:/var/lib/mysql
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --performance-schema=false --expire_logs_days=1
+    restart: always
+    logging: *json-logging
+
+networks:
+  frontend:
+    name: frontend_bridge
+  backend:
+    name: backend_bridge
+
+volumes:
+  database:
+    name: mysql_db

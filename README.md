@@ -1,2 +1,2 @@
-# django-rest-framework
-Django REST framework
+# Django REST framework
+## Preparation
