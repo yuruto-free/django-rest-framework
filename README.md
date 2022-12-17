@@ -25,14 +25,16 @@ Run the following command.
 
 ```bash
 docker-compose build --no-cache
+docker images | grep none | awk '{print $3;}' | xargs -I{} docker rmi {}
 ```
 
 ## Start
-Enter the following command to start the container.
+1. Migrate the database with reference to [the README.md](./django/README.md).
+1. Enter the following command to start the container.
 
-```bash
-docker-compose up -d
-```
+    ```bash
+    docker-compose up -d
+    ```
 
 ## Check log/status
 Execute the following command.
