@@ -8,6 +8,30 @@ x-logging:
     max-file: "3"
 
 services:
+  react:
+    build:
+      context: ./react
+      dockerfile: Dockerfile
+      args:
+        TZ: 'Asia/Tokyo'
+    image: react
+    container_name: react
+    environment:
+      - PUID=1000
+      - PGID=1000
+    networks:
+      - frontend
+    volumes:
+      - ./react/public:/home/node/app/public
+      - ./react/src:/home/node/app/src
+      - ./envs/react/.env:/home/node/app/.env:ro
+    ports:
+      - 3000:3000
+    depends_on:
+      - django
+    restart: always
+    logging: *json-logging
+
   django:
     build:
       context: ./django
@@ -21,7 +45,8 @@ services:
       - PGID=1000
       - LANGUAGE_CODE=ja
       - TZ=Asia/Tokyo
-      - APP_PORT=3000
+      - BACKEND_PORT=8000
+      - FRONTEND_PORT=3000
       - DB_HOST=mysql
       - DB_PORT=3306
       - DB_CHARSET=utf8mb4
@@ -36,9 +61,8 @@ services:
       - ./django/src:/code
       - ./django/sqlite:/sqlite
       - ./django/uwsgi.template:/data/uwsgi.template:ro
-      - ./static:/static
     ports:
-      - 3000:3000
+      - 8000:8000
     depends_on:
       - mysql
     restart: always

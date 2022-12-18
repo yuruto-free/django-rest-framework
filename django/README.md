@@ -6,12 +6,10 @@ First, run the following command to enter the docker environment.
 docker-compose run --rm django bash
 ```
 
-Migrations are how Django stores changes to your models. To do this, from the command line, run the following command, where "app-name" is a Django's application name.
+Migrations are how Django stores changes to your models. To do this, from the command line, run the following command.
 
 ```bash
-python manage.py makemigrations app-name
-# ex.
-# python manage.py makemigrations registration
+python manage.py makemigrations
 ```
 
 By running makemigrations, you're telling Django that you've made some changes to your models and that you'd like the chages to be stored as a migration.
@@ -25,7 +23,7 @@ python manage.py migrate
 Please remember the tree-step guid to making model changes:
 
 1. Change your models (in models.py).
-1. Run `python manage.py makemigrations app-name` to create migrations for those changes in your application.
+1. Run `python manage.py makemigrations app-name` to create migrations for those changes in your application, where `app-name` is a Django's application name.
 1. Run `python manage.py migrate` to apply those changes to the database.
 
 ## Create superuser account

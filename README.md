@@ -20,29 +20,50 @@
     # PUID = 1000 (= uid), PGID = 1000 (= gid)
     ```
 
+1. Setup Django with reference to [the README.md](./django/README.md).
+
 ## Build
 Run the following command.
 
 ```bash
-docker-compose build --no-cache
-docker images | grep none | awk '{print $3;}' | xargs -I{} docker rmi {}
+./wrapper.sh build
 ```
 
-## Start
-1. Migrate the database with reference to [the README.md](./django/README.md).
-1. Enter the following command to start the container.
+## Start containers
+Enter the following command to start the containers.
 
-    ```bash
-    docker-compose up -d
-    ```
+```bash
+./wrapper.sh start
+```
 
-## Check log/status
+## Stop containers
+Execute the following command to stop containers.
+
+```bash
+./wrapper.sh stop
+```
+
+## Restart containers
+Enter the following command to restart the containers.
+
+```bash
+./wrapper.sh restart
+```
+
+## Delete containers
+Run the following command to delete containers.
+
+```bash
+./wrapper.sh down
+```
+
+## Check log/status of containers
 Execute the following command.
 
 ```bash
 # show process status
-docker-compose ps
+./wrapper.sh ps
 
 # show log
-docker-compose logs
+./wrapper.sh logs
 ```
