@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # change uid and gid
-_uid=$(id node)
-_gid=$(id node)
+_uid=$(id -u node)
+_gid=$(id -g node)
 
 if [ -n "${PUID}" ]; then
     _uid=${PUID}
@@ -23,7 +23,7 @@ groupdel tmpgroup
 if [ "${DJANGO_APP_ENV}" = "development" ]; then
     su-exec node:node python manage.py makemigrations
     su-exec node:node python manage.py migrate
-    su-exec node:node python manage.py runserver 0.0.0.0:${APP_PORT}
+    su-exec node:node python manage.py runserver 0.0.0.0:${BACKEND_PORT}
 else
     # Waiting for MySQL database to be ready...
     db_cmd="mysql -h ${DB_HOST} -u ${MYSQL_USER} -p${MYSQL_PASSWORD} -P ${DB_PORT}"
@@ -37,7 +37,7 @@ else
 
     # Create ini file
     readonly env_vars=$({
-        echo '$$APP_PORT'
+        echo '$$BACKEND_PORT'
         echo '$$SRC_ROOT_PATH'
     } | tr '\n' ' ')
     cat /data/uwsgi.template | envsubst "${env_vars}" > /data/uwsgi.ini

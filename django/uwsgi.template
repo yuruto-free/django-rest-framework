@@ -4,7 +4,7 @@ uid            = node
 gid            = node
 project        = config
 base           = ${SRC_ROOT_PATH}
-portnum        = ${APP_PORT}
+portnum        = ${BACKEND_PORT}
 
 chdir          = %(base)
 wsgi-file      = %(base)/%(project)/wsgi.py
