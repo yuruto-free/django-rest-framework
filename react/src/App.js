@@ -1,18 +1,37 @@
-import { useEffect, useState } from 'react';
-//import axios from 'axios';
-//import jwt_decode from 'jwt-decode';
-//import { GoogleLogin, GoogleOAuthProvider  } from '@react-oauth/google';
+import { useState } from 'react';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import { Login, Logout } from './components/login-logout.js';
+import UserInfo from './components/user-info.js';
 
 function App() {
-  const [user, setUser] = useState({});
-  const baseURL = 'http://localhost:8000';
-  const drfClientID = process.env.REACT_APP_DRF_CLIENT_ID;
-  const drfClientSecret = process.env.REACT_APP_DRF_CLIENT_SECRET;
   const googleClientID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+  const [user, setUser] = useState({});
+
+  const handleSocialLogin = (response) => {
+    setUser(response);
+  };
+  const handleSocialLogout = () => {
+    setUser({});
+  };
 
   return (
-    <div>
-    </div>
+    <>
+      <GoogleOAuthProvider clientId={googleClientID}>
+        <Login
+          user={user}
+          text="Sign in with Google"
+          onSuccessCallback={(response) => handleSocialLogin(response)}
+        />
+        <UserInfo
+          user={user}
+        />
+        <Logout
+          user={user}
+          text="Sign out"
+          onClick={() => handleSocialLogout()}
+        />
+      </GoogleOAuthProvider>
+    </>
   );
 }
 

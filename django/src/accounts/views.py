@@ -1,15 +1,17 @@
 from rest_framework import viewsets, mixins
 from django.contrib.auth import get_user_model
+from rest_social_auth.views import SimpleJWTAuthMixin
 from .permissions import UserListPermission, UserDetailPermission
 from .serializers import UserListSerializer, UserDetailSerializer
 
 User = get_user_model()
 
-class UserViewSet(mixins.RetrieveModelMixin, 
-                   mixins.UpdateModelMixin,
-                   mixins.DestroyModelMixin,
-                   mixins.ListModelMixin, 
-                   viewsets.GenericViewSet):
+class UserViewSet(SimpleJWTAuthMixin,
+                  mixins.RetrieveModelMixin,
+                  mixins.UpdateModelMixin,
+                  mixins.DestroyModelMixin,
+                  mixins.ListModelMixin,
+                  viewsets.GenericViewSet):
     queryset = User.objects.all()
 
     def get_serializer_class(self):

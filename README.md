@@ -2,6 +2,7 @@
 ## Preparation
 1. Create `.env` file in `./envs/django` with reference to [the README.md](./envs/django/README.md).
 1. Create `.env` file in `./envs/mysql` with reference to [the README.md](./envs/mysql/README.md).
+1. Create `.env` file in `./envs/react` with reference to [the README.md](./envs/react/README.md).
 1. Check `.env` files exist.
 
     ```bash
@@ -9,6 +10,7 @@
     # results:
     #   envs/django/.env
     #   envs/mysql/.env
+    #   envs/react/.env
     ```
 
 1. Update `PUID` and `PGID` in `docker-compose.yml`. These IDs can be obtained by executing the following command.

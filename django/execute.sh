@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # change uid and gid
-_uid=$(id node)
-_gid=$(id node)
+_uid=$(id -u node)
+_gid=$(id -g node)
 
 if [ -n "${PUID}" ]; then
     _uid=${PUID}

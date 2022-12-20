@@ -21,7 +21,8 @@ USER node
 RUN    cd /home/node \
     && echo -e "y\n" | npx create-react-app app -timeout=60000 \
     && cd app \
-    && npm install axios jwt-decode @react-oauth/google@latest
+    && npm install axios @react-oauth/google@latest \
+    && sed -i -e "s|react-scripts start|WATCHPACK_POLLING=true react-scripts start|" package.json
 USER root
 
 WORKDIR /home/node/app
