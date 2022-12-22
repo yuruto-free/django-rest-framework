@@ -8,7 +8,7 @@ const redirectURL = 'http://localhost:3000';
 const Login = (props)  => {
   const handleAuthorizationCode = (response) => {
     // Convert authorization code to access token
-    axios.post(`${baseURL}/api/login/social/jwt-pair-user/`, {
+    axios.post(`${baseURL}/api/login/social/jwt-pair/`, {
       provider: 'google-oauth2',
       code: response.code,
       redirect_uri: redirectURL,
